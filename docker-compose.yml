@@ -1,0 +1,27 @@
+version: '2.4'
+services:
+  manticoresearch:
+    image: manticoresearch/manticore:dev
+    privileged: true
+    mem_swappiness: 0
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nproc: 65535
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - "127.0.0.1:19306:9306"
+    volumes:
+      - ./data/:/var/lib/manticore/
+    environment:
+      - searchd_binlog_path=
+  load:
+    build:
+      context: ./load/
+    privileged: true
+    volumes:
+      - ./cache/:/tmp/
+
